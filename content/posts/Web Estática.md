@@ -135,4 +135,4 @@ git push
 
 Por último, si nos dirigimos a la configuración de nuestro nuevo repositorio de GitHub, si bajamos, podremos ver un apartado llamado GitHub Pages, en el cual, si todo ha salido bien, nos dirá que nuestra página está subida a [la url que le hemos configurado](https://juanan219.github.io/)
 
-![Captura 1](/imagenes/web_estatica/1.PNG)
+![Captura 1](/web_estatica/1.PNG)
