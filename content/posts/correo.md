@@ -1,24 +1,5 @@
----
-author:
-  name: "Juan Antonio Reifs"
-date: 2021-02-11
-linktitle: Servidor de correos
-type:
-- post
-- posts
-title: Servidor de correos
-weight: 10
-series:
-- Hugo 101
-tags:
-  - Servicios
-  - Correo
-  - Thunderbird
-  - SMTPS
-  - Dovecot
-  - IMAPS
-  - Postfix
----
+# Servidor de correos
+
 En esta entrada vamos a configurar un servidor de correos en un VPS, para ello primero deberemos configurar el nombre del servidor de correos, el cual será `mail.iesgn16.es`, cuyo nombre aparecerá en el registro MX de nuestro DNS.
 
 Para configurar el mail en nuestro servidor, vamos a instalar postfix
@@ -41,23 +22,21 @@ Creamos el registro MX y SPF en nuestro DNS
 
 ## Gestión de correos desde el servidor
 
-* **Tarea 1:**
+* **Tarea 1**
 
-	* **a)** Documenta una prueba de funcionamiento, donde envías un correo desde tu servidor local al exterior.
-
-	Para enviar correos deberemos instalar `mailutils`
+Vamos a descargarnos la herramienta que nos permita enviar/leer correos que recibamos en nuestro servidor postfix, dicha herramienta se llama `mailutils` y se instala de la siguiente manera
 ```
 sudo apt-get install mailutils
 ```
 
-	Ahora enviamos un correo
+Ahora que tenemos `mailutils`, vamos a enviar un correo de prueba
 ```
 mail -s "Prueba" initiategnat9@gmail.com
 Cc: 
 Hola, esto es una prueba
 ```
 
-	* **b)** Muestra el log donde se vea el envío.
+Cuando enviamos el correo, podemos verlo en el registro de log de postfix
 ```
 Feb  9 12:24:58 fenix postfix/qmgr[30796]: 9C31561C11: removed
 Feb  9 12:31:19 fenix postfix/pickup[30795]: 5285E61C11: uid=1000 from=<debian@fenix.iesgn16.es>
@@ -67,24 +46,26 @@ Feb  9 12:31:19 fenix postfix/smtp[31356]: 5285E61C11: to=<initiategnat9@gmail.c
 Feb  9 12:31:19 fenix postfix/qmgr[30796]: 5285E61C11: removed
 ```
 
-	* **c)** Muestra el correo que has recibido.
+Este es el correo que he recibido en mi gmail
 
 ![Captura 2](/correo/2.png)
 
-	* **d)** Muestra el registro SPF.
+Este es el registro SPF que he tenido que añadir a mi servidor DNS
 
 ![Captura 3](/correo/3.png)
 
-* **Tarea 2:**
+* **Tarea 2**
 
 	* **a)** Documenta una prueba de funcionamiento, en la que envíes un correo desde el exterior (gmail, hotmail, etc...) a tu servidor local.
 
-	Para asegurarnos de que podemos recibir corres desde el exterior, deberemos tener en el fichero `/etc/mailname` el nombre de nuestro dominio, en mi caso `iesgn16.es` y asegurarnos de que nuestro registro MX esté apuntando a una máquina que esté en un registro A del DNS, en mi caso dicha máquina es `fenix.iesgn.es`.
+Vamos a comprobar que podemos recibir correos desde el exterior hacia nuestros servidor, para ello, primero deberemos tener configurado nuestro nombre de dominio en el fichero `/etc/mailname`, en mi caso, el nopmbre de dominio sería `iesgn16.es`. Ahora revisamos la configuración del DNS para que el registro MX `mail.iesgn16.es` apunte a `fenix.iesgn16.es` (Que es la máquina en la que tengo el servidor de correo).
 
-	Ahora que hemos comprobado que tenemos todo correcto, vamos a enviar un correo de prueba a nuestro usuario debian y lo abrimos desde dicho usuario en nuestro servidor
+Cuando todo esté correcto, hacemos una prueba y enviamos un correo a nuestro usuario del servidor
 
 ![Captura 4](/correo/4.png)
 
+
+Lo abrimos desde nuestro servidor con el comando `mail`
 ```
 mail
 "/var/mail/debian": 1 message 1 new
@@ -103,8 +84,7 @@ Correcto, prueba de correo recibida
 *Fdo: Juan Antonio Reifs Ram=C3=ADrez*
 ```
 
-	* **b)** Muestra el log donde se vea el envío
-
+Podemos ver el log en el cual se ve que hemos recibido el correo
 ```
 Feb  9 13:00:19 fenix postfix/smtpd[31853]: connect from mail-ej1-f49.google.com[209.85.218.49]
 Feb  9 13:00:19 fenix postfix/smtpd[31853]: CF3EB61A7B: client=mail-ej1-f49.google.com[209.85.218.49]
@@ -117,17 +97,14 @@ Feb  9 13:00:19 fenix postfix/local[31859]: CF3EB61A7B: to=<debian@fenix.iesgn16
 
 * **Tarea 3:**
 
-	* Vamos a comprobar cómo los procesos del servidor pueden mandar correos para informar sobre su estado. Por ejemplo, cada vez que se ejecuta una tarea cron podemos enviar un correo informando del resultado. Normalmente estos correos se mandan al usuario root del servidor, para ello hacemos:
+Los procesos del sistema pueden mandar correos para informar sobre su estado. Por ejemplo, cuando se ejecuta una tarea de cron, podemos enviar un correo informando del resultado de la misma. Normalmente estos correos se mandan al usuario root, para hacer esto haremos lo siguiente:
 ```
 crontab -e
-```
 
-	Indicamos dónde se envía el correo:
-```
 MAILTO = root
 ```
 
-	Podemos poner una tarea en el cron para ver cómo se manda el correo.
+Podemos poner una tarea en el cron para ver cómo se manda el correo.
 ```
 debian@fenix:~$ crontab -e
 
@@ -170,7 +147,7 @@ Saved 1 message in /root/mbox
 Held 0 messages in /var/mail/root
 ```
 
-	Posteriormente, usando alias y redirecciones podemos hacer llegar esos correos a nuestro correo personal.
+Posteriormente, usando alias y redirecciones podemos hacer llegar esos correos a nuestro correo personal.
 ```
 sudo su -
 
@@ -183,19 +160,14 @@ exit
 
 ![Captura 5](/correo/5.png)
 
-	Crea un nuevo alias para que los correos se manden a un usuario sin privilegios y comprueba que llegan a ese usuario.
+Crea un nuevo alias para que los correos se manden a un usuario sin privilegios y comprueba que llegan a ese usuario.
 ```
-crontab -e
-
-MAILTO= root
-MAILTO=usuario
-
-42 * * * * sudo apt-get update
-
 sudo nano /etc/aliases
 
 postmaster:    root
 usuario: debian
+
+sudo newaliases
 
 mail
 
@@ -206,7 +178,8 @@ mail
 
 * **Tarea 8:**
 
-	* Configura el buzón de usuarios de tipo `Maildir`.
+Ahora vamos a configurar el buzón de correos de cada usuario siendo de tipo `Maildir`, para ello vamos a modificar el fichero `/etc/postfix/main.cf` y comprobamos, mandando un correo, que se nos guardan en ese directorio.
+
 ```
 sudo nano /etc/postfix/main.cf
 
@@ -226,11 +199,13 @@ debian@fenix:~$ ls Maildir/new/
 1612941963.V801I20b38M9703.fenix
 ```
 
-	* Envía un correo a tu usuario y comprueba que el correo se ha guardado en el buzón `Maildir` del usuario del sistema correspondiente.
-
 ![Captura 6](/correo/6.png)
 
+Para abrir los correos de tipo maildir desde la terminal, no podemos hacer con mail, asó que instalaremos la herramienta mutt y editamos el fichero `~/.muttrc`
+
 ```
+sudo apt-get install muttrc
+
 debian@fenix:~$ nano ~/.muttrc
 
 set mbox_type=Maildir
@@ -247,7 +222,11 @@ macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
 macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
 
 macro compose A "<attach-message>?<toggle-mailboxes>" "attach message(s) to this message"
+```
 
+Ahora abrimos el mensaje
+
+```
 mutt
 
 1     Feb 10 juanan veintidi (2.2K) Prueba Maildir
@@ -274,14 +253,14 @@ Mailtrack
 
 * **Tarea 9:**
 
-	* Instala y configura dovecot para ofrecer el protocolo IMAP. Configura dovecot de manera adecuada para ofrecer autentificación y cifrado.
+Ahora vamos a instalar dovecot para poder ofrecer el protocolo IMAP y lo configuraremos para ofrecer autentificación y cifrado.
+
 ```
 sudo apt-get install dovecot-imapd
 ```
 
-	* Para realizar el cifrado de la comunicación crea un certificado en LetsEncrypt para el dominio `mail.iesgn.es`.
+Para poder realizar el cifrado de la comunicación, vamos a crear un certificado de LetsEncrypt para el dominio `mail.iesgn.es`. Para realizarlo instalaremos `certbot` así que seguimos los siguientes pasos
 
-	Instalamos certbot siguiendo los siguientes pasos
 ```
 sudo apt install snapd
 
@@ -293,16 +272,14 @@ sudo snap install --classic certbot
 
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 ```
-	Generamos el certificado con certbot
+Cuando tengamos `certbot`instalado, generamos nuestro certificado
 ```
 sudo certbot certonly --standalone
 ```
 
-	Ahora nuestro certificado/clave privada se encontrará en el directorio `/etc/letsencrypt/live/mail.iesgn16.es`.
+Cuando se genere, se guardará en el directorio `/etc/letsencrypt/live/mail.iesgn16.es`. Ahora que lo tenemos todo listo, vamos a pasar a la configuración de dovecot:
 
-	Cuando tengamos dovecot instalado y generado nuestro certificado con certbot, vamos a configurar dovecot:
-
-	1. Editamos el fichero `/etc/dovecot/conf.d/10-auth.conf` para habilitar el mecanismo de autentificación
+1. Editamos el fichero `/etc/dovecot/conf.d/10-auth.conf` para habilitar el mecanismo de autentificación
 ```
 sudo nano /etc/dovecot/conf.d/10-auth.conf
 
@@ -311,7 +288,7 @@ disable_plaintext_auth = yes
 auth_mechanisms = plain login
 ```
 
-	2. Configuramos el directorio Maildir y comentamos la configuración mbox que viene predeterminada en dovecot
+2. Configuramos el directorio Maildir y comentamos la configuración mbox que viene predeterminada en dovecot
 ```
 sudo nano /etc/dovecot/conf.d/10-mail.conf
 
@@ -320,7 +297,7 @@ mail_location = maildir:~/Maildir
 #mail_location = mbox:~/mail:INBOX=/var/mail/%u
 ```
 
-	3. Descomentamos las siguientes líneas para habilitar el imaps
+3. Descomentamos las siguientes líneas para habilitar el imaps
 ```
 sudo nano /etc/dovecot/conf.d/10-master.conf
 
@@ -340,7 +317,7 @@ unix_listener /var/spool/postfix/private/auth {
 }
 ```
 
-	4. Por último configuramos nuestros certificados y reiniciamos dovecot
+4. Por último configuramos nuestros certificados y reiniciamos dovecot
 ```
 sudo nano /etc/dovecot/conf.d/10-ssl.conf
 
@@ -352,9 +329,9 @@ ssl_key = </etc/letsencrypt/live/mail.iesgn16.es/privkey.pem
 sudo systemctl restart dovecot
 ```
 
-	Podemos verificar la configuración de nuestro dovecot con el comando `dovecot -n`
+Podemos verificar la configuración de nuestro dovecot con el comando `dovecot -n`
 
-	Ahora vamos a hacer una prueba, para verificar que recibimos mensajes en nuestro Mailbox, para ello vamos a enviar un correo de prueba desde gmail
+Ahora vamos a hacer una prueba, para verificar que recibimos mensajes en nuestro Mailbox, para ello vamos a enviar un correo de prueba desde gmail
 
 ![Captura 7](/correo/7.png)
 
@@ -401,9 +378,7 @@ Como podemos ver, hemos recibido el mensaje que hemos enviado anteriormente
 
 * **Tarea 11:**
 
-	* Configura de manera adecuada postfix para que podamos enviar un correo desde un cliente remoto. La conexión entre cliente y servidor debe de estar autentificada con SASL usando dovecot y además debe estar cifrada. Para cifrar la comunicación vamos a usar:
-
-		* **SMTPS:** Utiliza un puerto no estándar (465) para SMTPS. No es una extensión de SMTP. Es muy parecido a HTTPS
+Vamos a configurar postfix para que podamos enviar correos desde los clientes remotos. La conexión entre el cliente y el servidor debe de estar autentificada con SASL y usando dovecot y, además, debede estar cifrada. Para realizar este cifrado usaremos `SMTPS`, el cual usa el puerto 465.
 
 Primero habilitamos SMTP-AUTH para permitir que los clientes se identifiquen a través del mecanismo de autentificación SASL. También se debe usar TLS para cifrar el proceso de autenticación, para ello ejecutamos las siguientes instrucciones para editar el fichero de configuración de postfix.
 
