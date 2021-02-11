@@ -1,4 +1,25 @@
-# Servidor de correos
+---
+author:
+  name: "Juan Antonio Reifs"
+date: 2021-02-11
+linktitle: Servidor de correos
+type:
+- post
+- posts
+title: Servidor de correos
+weight: 10
+series:
+- Hugo 101
+images:
+tags:
+  - Servicios
+  - Configuracion
+  - Correo
+  - Postfix
+  - Dovecot
+  - IMTPS
+  - SMTPS
+---
 
 En esta entrada vamos a configurar un servidor de correos en un VPS, para ello primero deberemos configurar el nombre del servidor de correos, el cual será `mail.iesgn16.es`, cuyo nombre aparecerá en el registro MX de nuestro DNS.
 
