@@ -2,7 +2,7 @@
 author:
   name: "Juan Antonio Reifs"
 date: 2021-02-12
-linktitle: Documentación iSCSI
+linktitle: Documentacion iSCSI
 type:
 - post
 - posts
