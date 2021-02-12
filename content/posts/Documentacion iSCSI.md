@@ -1,4 +1,23 @@
-# Apuntes iSCSI
+---
+author:
+  name: "Juan Antonio Reifs"
+date: 2021-02-12
+linktitle: Documentación iSCSI
+type:
+- post
+- posts
+title: Apuntes iSCSI
+weight: 10
+series:
+- Hugo 101
+images:
+tags:
+  - iSCSI
+  - Apuntes
+  - Documentación
+  - SAN
+  - FCP
+---
 
 ## Storage Area Network (SAN)
 
