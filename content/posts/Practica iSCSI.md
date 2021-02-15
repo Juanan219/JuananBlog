@@ -23,11 +23,11 @@ tags:
 ## Creación de targets en Linux
 
 Primero vamos a crear un target con una LUN, para ello primero vamos a instalar el paquete `tgt` en el servidor
-```
+~~~
 sudo apt-get install tgt
-```
+~~~
 Ahora vamos a definir dos targets, uno para un cliente Linux y otro para un cliente Windows. Para definirlos de forma persistente, deberemos editar el fichero `/etc/tgt/targets.conf` y reiniciamos el servicio `tgt`
-```
+~~~
 sudo nano etc/tgt/targets.conf
 [...]
 <target iqn.2021-02.es.juanan:target1>
@@ -38,10 +38,10 @@ sudo nano etc/tgt/targets.conf
 </target>
 
 sudo systemctl restart tgt
-```
+~~~
 
 Podemos ver los targets con el siguiente comando
-```
+~~~
 sudo tgtadm --lld iscsi --op show  --mode target
 
 Target 1: iqn.2021-02.es.juanan:target1
@@ -118,37 +118,37 @@ Target 2: iqn.2021-02.es.juanan:target2
     Account information:
     ACL information:
         ALL
-```
+~~~
 
 Ahora nos vamos a conectar al cliente Linux e instalaremos la herramienta `open-iscsi`
-```
+~~~
 sudo apt-get install open-iscsi
-```
+~~~
 
 Como podemos ver, esta máquina tiene solo 1 disco duro
-```
+~~~
 lsblk -f
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 sda                                                                     
 ├─sda1 ext4         983742b1-65a8-49d1-a148-a3865ea09e24   16.1G     7% /
 ├─sda2                                                                  
 └─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                [SWAP]
-```
+~~~
 
 Vamos a buscar los targets disponibles
-```
+~~~
 sudo iscsiadm --mode discovery --type sendtargets --portal server
 192.168.1.113:3260,1 iqn.2021-02.es.juanan:target1
 192.168.1.113:3260,1 iqn.2021-02.es.juanan:target2
-```
+~~~
 
 Cuando sepamos los targets que tiene el servidor `server` disponibles, podemos conectarnos, ya que no tienen autenticación, de momento
-```
+~~~
 sudo iscsiadm --mode node -T iqn.2021-02.es.juanan:target1 --portal server --login
-```
+~~~
 
 Después del comando anterior, esta es la nueva salida de `lsblk -f`
-```
+~~~
 lsblk -f
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 sda                                                                     
@@ -156,10 +156,10 @@ sda
 ├─sda2                                                                  
 └─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                [SWAP]
 sdb
-```
+~~~
 
 Le damos formato y lo montamos
-```
+~~~
 sudo mkfs.ext4 /dev/sdb
 mke2fs 1.44.5 (15-Dec-2018)
 Creating filesystem with 262144 4k blocks and 65536 inodes
@@ -181,12 +181,12 @@ sda
 ├─sda2                                                                  
 └─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                [SWAP]
 sdb    ext4         97ec7dd7-1a01-4ab9-8572-4607066b6f2b  906.2M     0% /mnt
-```
+~~~
 
 ## Montar targets de forma autmática con systemd mount
 
 Para montar los discos duros de iSCSI de forma permanente en unestro cliente Linux vamos a usar `systemd mount`, para ello modificaremos el fichero `/etc/iscsi/iscsid.conf`, comentamos la línea 43 y descomentamos la 40
-```
+~~~
 sudo nano /etc/iscsi/iscsid.conf
 [...]
 node.startup = automatic
@@ -195,10 +195,10 @@ node.startup = automatic
 [...]
 
 sudo systemctl restart iscsi
-```
+~~~
 
 Ahora creamos la unidad en `systemctl`, para ello creamos un fichero en la ruta `/etc/systemd/system`
-```
+~~~
 sudo nano discored1.mount
 
 [Unit]
@@ -212,18 +212,18 @@ Options=_netdev
 
 [Install]
 WantedBy=multi-user.target
-```
+~~~
 
 Ahora reiniciamos los servicios, montamos el disco y creamos un enlace simbólico para que se monte automáticamente en el arranque, para realizar todo esto, el disco que queremos tiene que estar montado
-```
+~~~
 sudo systemctl daemon-reload
 sudo iscsiadm --mode node -T iqn.2021-02.es.juanan:target1 --portal server --login
 sudo systemctl start discored1.mount
 sudo systemctl enable discored1.mount
-```
+~~~
 
 Comprobamos si se han realizado los cambios
-```
+~~~
 lsblk -f
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 sda                                                                     
@@ -231,10 +231,10 @@ sda
 ├─sda2                                                                  
 └─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                [SWAP]
 sdb    ext4         97ec7dd7-1a01-4ab9-8572-4607066b6f2b  906.2M     0% /discored1
-```
+~~~
 
 Ahora reiniciamos y volveremos a comprobar
-```
+~~~
 sudo reboot
 
 lsblk -f
@@ -245,11 +245,11 @@ sda
 └─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                [SWAP]
 sdb    ext4         97ec7dd7-1a01-4ab9-8572-4607066b6f2b  906.2M     0% /discored1
 sdc
-```
+~~~
 
 ## Montar target en Windows con autenticación CHAP
 Primero vamos a modificar de nuevo el fichero `/etc/tgt/targets.conf` en el server de iSCSI para introducir el usuario y la contraseña del target. Cuando hagamos las modificaciones, reiniciamos el servicio
-```
+~~~
 sudo nano /etc/tgt/targets.conf
 [...]
 <target iqn.2021-02.es.juanan:target2>
@@ -258,7 +258,7 @@ sudo nano /etc/tgt/targets.conf
 </target>
 
 sudo systemctl restart tgt.service 
-```
+~~~
 
 Ahora vamos a montar el disco `sdc` en windows, para ello nos abrimos el `Panel de control` > `Sistema y Seguridad` > `Herramientas Administrativas` > `Iniciador iSCSI`. Cuando estemos en este punto, Windows nos preguntará si queremos iniciar el servicio `iSCSI` y le tendremos que decir que sí.
 

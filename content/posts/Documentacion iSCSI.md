@@ -86,9 +86,9 @@ tags:
 ## Demo iSCSI
 
 * Instalamos `tgt`
-```
+~~~
 sudo apt-get install tgt
-```
+~~~
 
 * Hay dos formas de usar este software:
 
@@ -103,45 +103,42 @@ sudo apt-get install tgt
 	* **--mode:** Lo que queremos crear, en este caso es un target, por lo que el valor es `target` (`--mode target`)
 	* **--tid:** El ID de nuestro nuevo target, en este caso le vamos a asignar el id `1` (`--tid 1`)
 	* **-T:** El nombre del target que vamos a definir, en este caso será `iqn."año-mes de creación.dominio:nombre_target"` (`--T iqn.2021-02.es.juanan:target1`)
-```
+~~~
 sudo tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2021-02.es.juanan:target1
-```
+~~~
 
-* Si queremos eliminar un target, simplemente ejecutamos el siguiente comando
-
-```
+	* Si queremos eliminar un target, simplemente ejecutamos el siguiente comando
+~~~
 sudo tgtadm --lld iscsi --op delete --mode target --tid 1
-```
+~~~
 
 * Le añadimos un dispositivo de bloques:
 
 	* **--mode logicalunit:** Le decimos que queremos añadir una unidad lógica
 	* **--lun 1:** El ID de la unidad lógica que vamos a añadir
 	* **-b /dev/sdb:** Ruta hacia el dispositivo de bloques que vamos a añadir 
-```
+~~~
 sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b /dev/sdb
-``` 
+~~~ 
 
 * Le añadimos un segundo y tercer dispositivo de bloques
-```
+~~~
 sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 2 -b /dev/sdc
 sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 3 -b /dev/sdd
-```
+~~~
 
-* Si queremos eliminar alguna de las unidades lógicas que hemos añadido, ejecutamos el siguiente comando:
-
-```
+	* Si queremos eliminar alguna de las unidades lógicas que hemos añadido, ejecutamos el siguiente comando:
+~~~
 sudo tgtadm --lld iscsi --op delete --mode logicalunit --tid 1 --lun 2
-```
+~~~
 
 * Comprobamos que el target está bien definido
-```
+~~~
 sudo tgtadm --lld iscsi --op show --mode target
-```
+~~~
 
-* Salida del comando anterior
-
-```
+	* Salida del comando anterior
+~~~
 sudo tgtadm --lld iscsi --op show --mode target
 Target 1: iqn.2021-02.es.juanan:target1
     System information:
@@ -207,22 +204,21 @@ Target 1: iqn.2021-02.es.juanan:target1
             Backing store flags: 
     Account information:
     ACL information:
-```
+~~~
 
 * Explicación:
 
 	* **Información sobre el target:** Podemos ver que nos muestra el `Target 1` y su nombre `iqn.2021-02.es.juanan:target1`. Está en modo `ready` (`State: ready`) y tiene un controlador `iscsi` (`Driver: iscsi`)
-```
+~~~
 Target 1: iqn.2021-02.es.juanan:target1
     System information:
         Driver: iscsi
         State: ready
     I_T nexus information:
-```
+~~~
 
-* **Información de las LUN:** En este apartado (que es el más extenso), podemos ver que tenemos definidas 4 LUNs (`LUN 0, LUN 1, LUN 2 y LUN 3`), pero nosotros solo hemos definido 3 LUNs, esto se debe a que la `LUN 0` es una LUN de control, esto quiere decir que en esta LUN solo se guarda las características de las LUNs y siempre se define cuando se define un target. En las demás LUNs podemos ver información como el tipo de LUN que es (`Type: disk`), si es un dispositivo extraíble (`Removable media: No`), si esta en modo sólo lectura (`Readonly: No`), si tiene aprovisionamiento ligero (`Thin-provisioning: No`), el dispositivo de bloques que tiene asociado (`Backing store path: /dev/sdb`), el modo en el que se encuentra (`Backing store type: rdwr`), etc...
-
-```
+	* **Información de las LUN:** En este apartado (que es el más extenso), podemos ver que tenemos definidas 4 LUNs (`LUN 0, LUN 1, LUN 2 y LUN 3`), pero nosotros solo hemos definido 3 LUNs, esto se debe a que la `LUN 0` es una LUN de control, esto quiere decir que en esta LUN solo se guarda las características de las LUNs y siempre se define cuando se define un target. En las demás LUNs podemos ver información como el tipo de LUN que es (`Type: disk`), si es un dispositivo extraíble (`Removable media: No`), si esta en modo sólo lectura (`Readonly: No`), si tiene aprovisionamiento ligero (`Thin-provisioning: No`), el dispositivo de bloques que tiene asociado (`Backing store path: /dev/sdb`), el modo en el que se encuentra (`Backing store type: rdwr`), etc...
+~~~
 LUN: 0
     Type: controller
     SCSI ID: IET     00010000
@@ -251,51 +247,48 @@ LUN: 1
     Backing store type: rdwr
     Backing store path: /dev/sdb
     Backing store flags: 
-```
+~~~
 
-* **Información adicional:** Este comando también nos muestra información sobre la cuenta de acceso y sobre las ACL si las tuvieramos
-
-```
+	* **Información adicional:** Este comando también nos muestra información sobre la cuenta de acceso y sobre las ACL si las tuvieramos
+~~~
 Account information:
 ACL information:
-```
+~~~
 
 * Podemos hacer accesible al target creado desde todas las interfaces de red o desde interfaces de red específicas de nuestra máquina. En este caso la haremos accesible a través de todas las interfaces de red de las que disponga nuestra máquina:
 
 	* **--op bind:** Operación que nos permite especificar por cuáles interfaces de red queremos hacer accesible un objeto
 	* **--I ALL:** Le indicamos las interfaces de red por las que queremos hacer accesible este target, en este caso, le hemos puesto el valor `ALL` para que este target sea accesible por todas las interfaces de red.
-```
+~~~
 sudo tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
-```
+~~~
 
 * Cuando tengamos el target configurado y las interfaces de red por las que es accesible definidas, vamos a pasar a la configuración del cliente, ya que, dicho target, debería ser visible desde el cliente. Para conectar el target al cliente, debemos irnos al cliente e instalar el siguiente paquete
-```
+~~~
 sudo apt-get install open-iscsi
-```
-* Al instalar el paquete, se nos asignará un nombre predeterminado, el cual se puede ver en el fichero `/etc/iscsi/initiatorname.iscsi` (Este fichero no se debe editar, a parte, no es necesario editarlo a no ser que lo necesites)
-
-```
+~~~
+	* Al instalar el paquete, se nos asignará un nombre predeterminado, el cual se puede ver en el fichero `/etc/iscsi/initiatorname.iscsi` (Este fichero no se debe editar, a parte, no es necesario editarlo a no ser que lo necesites)
+~~~
 sudo tail /etc/iscsi/initiatorname.iscsi
 
 InitiatorName=iqn.1993-08.org.debian:01:7eb51324d021
-```
+~~~
 
 * Ahora que lo tenemos instalado, podemos ver la información:
 
-```
+~~~
 sudo iscsiadm --mode discovery --type sendtargets --portal server
 
 192.168.1.48:3260,1 iqn.2021-02.es.juanan:target1
-```
+~~~
 
 * También nos podemos conectar al target:
-```
+~~~
 sudo iscsiadm --mode node -T iqn.2021-02.es.juanan:target1 --portal server --login
-```
+~~~
 
-* Estas son las entradas del log del kernel (`journalctl -f -k`) que podemos ver cuando nos conectamos. Si nos damos cuenta, es como si le conectásemos 3 nuevos discos
-
-```
+	* Estas son las entradas del log del kernel (`journalctl -f -k`) que podemos ver cuando nos conectamos. Si nos damos cuenta, es como si le conectásemos 3 nuevos discos
+~~~
 Feb 12 20:51:16 initiator kernel: Loading iSCSI transport class v2.0-870.
 Feb 12 20:51:16 initiator kernel: iscsi: registered transport (tcp)
 Feb 12 20:51:16 initiator kernel: iscsi: registered transport (iser)
@@ -326,22 +319,20 @@ Feb 12 22:23:15 initiator kernel: sd 1:0:0:3: [sdd] Write cache: enabled, read c
 Feb 12 22:23:15 initiator kernel: sd 1:0:0:2: [sdc] Attached SCSI disk
 Feb 12 22:23:15 initiator kernel: sd 1:0:0:1: [sdb] Attached SCSI disk
 Feb 12 22:23:15 initiator kernel: sd 1:0:0:3: [sdd] Attached SCSI disk
-```
+~~~
 
-* Esta es la salida del comando `lsblk` antes de conectarnos
-
-```
+	* Esta es la salida del comando `lsblk` antes de conectarnos
+~~~
 lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda      8:0    0 19.8G  0 disk 
 ├─sda1   8:1    0 18.8G  0 part /
 ├─sda2   8:2    0    1K  0 part 
 └─sda5   8:5    0 1021M  0 part [SWAP]
-```
+~~~
 
-* Esta es la salida del comando `lsblk` después de conectarnos
-
-```
+	* Esta es la salida del comando `lsblk` después de conectarnos
+~~~
 lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda      8:0    0 19.8G  0 disk 
@@ -351,10 +342,10 @@ sda      8:0    0 19.8G  0 disk
 sdb      8:16   0    1G  0 disk 
 sdc      8:32   0    1G  0 disk 
 sdd      8:48   0    1G  0 disk
-```
+~~~
 
 * Ahora que los tenemos conectados remotamente a nuestra máquina, podemos operar sobre ellos, por ejemplo, si queremos montar uno de los dispositivos (`/dev/sdb`) de bloques le podemos dar formato `ext4` y montarlo en `/mnt`
-```
+~~~
 sudo mkfs.ext4 /dev/sdb
 
 sudo mount /dev/sdb /mnt
@@ -362,4 +353,4 @@ sudo mount /dev/sdb /mnt
 lsblk -f
 
 sdb    ext4         86b14bd0-6953-4996-a1da-f82f5d248b51  906.2M     0% /mnt
-```
+~~~
