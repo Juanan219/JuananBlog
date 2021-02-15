@@ -107,7 +107,8 @@ sudo apt-get install tgt
 sudo tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2021-02.es.juanan:target1
 ```
 
-	* Si queremos eliminar un target, simplemente ejecutamos el siguiente comando
+* Si queremos eliminar un target, simplemente ejecutamos el siguiente comando
+
 ```
 sudo tgtadm --lld iscsi --op delete --mode target --tid 1
 ```
@@ -127,7 +128,8 @@ sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 2 -b /dev/sdc
 sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 3 -b /dev/sdd
 ```
 
-	* Si queremos eliminar alguna de las unidades lógicas que hemos añadido, ejecutamos el siguiente comando:
+* Si queremos eliminar alguna de las unidades lógicas que hemos añadido, ejecutamos el siguiente comando:
+
 ```
 sudo tgtadm --lld iscsi --op delete --mode logicalunit --tid 1 --lun 2
 ```
@@ -137,7 +139,8 @@ sudo tgtadm --lld iscsi --op delete --mode logicalunit --tid 1 --lun 2
 sudo tgtadm --lld iscsi --op show --mode target
 ```
 
-	* Salida del comando anterior
+* Salida del comando anterior
+
 ```
 sudo tgtadm --lld iscsi --op show --mode target
 Target 1: iqn.2021-02.es.juanan:target1
@@ -217,7 +220,8 @@ Target 1: iqn.2021-02.es.juanan:target1
     I_T nexus information:
 ```
 
-	* **Información de las LUN:** En este apartado (que es el más extenso), podemos ver que tenemos definidas 4 LUNs (`LUN 0, LUN 1, LUN 2 y LUN 3`), pero nosotros solo hemos definido 3 LUNs, esto se debe a que la `LUN 0` es una LUN de control, esto quiere decir que en esta LUN solo se guarda las características de las LUNs y siempre se define cuando se define un target. En las demás LUNs podemos ver información como el tipo de LUN que es (`Type: disk`), si es un dispositivo extraíble (`Removable media: No`), si esta en modo sólo lectura (`Readonly: No`), si tiene aprovisionamiento ligero (`Thin-provisioning: No`), el dispositivo de bloques que tiene asociado (`Backing store path: /dev/sdb`), el modo en el que se encuentra (`Backing store type: rdwr`), etc...
+* **Información de las LUN:** En este apartado (que es el más extenso), podemos ver que tenemos definidas 4 LUNs (`LUN 0, LUN 1, LUN 2 y LUN 3`), pero nosotros solo hemos definido 3 LUNs, esto se debe a que la `LUN 0` es una LUN de control, esto quiere decir que en esta LUN solo se guarda las características de las LUNs y siempre se define cuando se define un target. En las demás LUNs podemos ver información como el tipo de LUN que es (`Type: disk`), si es un dispositivo extraíble (`Removable media: No`), si esta en modo sólo lectura (`Readonly: No`), si tiene aprovisionamiento ligero (`Thin-provisioning: No`), el dispositivo de bloques que tiene asociado (`Backing store path: /dev/sdb`), el modo en el que se encuentra (`Backing store type: rdwr`), etc...
+
 ```
 LUN: 0
     Type: controller
@@ -249,7 +253,8 @@ LUN: 1
     Backing store flags: 
 ```
 
-	* **Información adicional:** Este comando también nos muestra información sobre la cuenta de acceso y sobre las ACL si las tuvieramos
+* **Información adicional:** Este comando también nos muestra información sobre la cuenta de acceso y sobre las ACL si las tuvieramos
+
 ```
 Account information:
 ACL information:
@@ -267,7 +272,8 @@ sudo tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
 ```
 sudo apt-get install open-iscsi
 ```
-	* Al instalar el paquete, se nos asignará un nombre predeterminado, el cual se puede ver en el fichero `/etc/iscsi/initiatorname.iscsi` (Este fichero no se debe editar, a parte, no es necesario editarlo a no ser que lo necesites)
+* Al instalar el paquete, se nos asignará un nombre predeterminado, el cual se puede ver en el fichero `/etc/iscsi/initiatorname.iscsi` (Este fichero no se debe editar, a parte, no es necesario editarlo a no ser que lo necesites)
+
 ```
 sudo tail /etc/iscsi/initiatorname.iscsi
 
@@ -287,7 +293,8 @@ sudo iscsiadm --mode discovery --type sendtargets --portal server
 sudo iscsiadm --mode node -T iqn.2021-02.es.juanan:target1 --portal server --login
 ```
 
-	* Estas son las entradas del log del kernel (`journalctl -f -k`) que podemos ver cuando nos conectamos. Si nos damos cuenta, es como si le conectásemos 3 nuevos discos
+* Estas son las entradas del log del kernel (`journalctl -f -k`) que podemos ver cuando nos conectamos. Si nos damos cuenta, es como si le conectásemos 3 nuevos discos
+
 ```
 Feb 12 20:51:16 initiator kernel: Loading iSCSI transport class v2.0-870.
 Feb 12 20:51:16 initiator kernel: iscsi: registered transport (tcp)
@@ -321,7 +328,8 @@ Feb 12 22:23:15 initiator kernel: sd 1:0:0:1: [sdb] Attached SCSI disk
 Feb 12 22:23:15 initiator kernel: sd 1:0:0:3: [sdd] Attached SCSI disk
 ```
 
-	* Esta es la salida del comando `lsblk` antes de conectarnos
+* Esta es la salida del comando `lsblk` antes de conectarnos
+
 ```
 lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -331,7 +339,8 @@ sda      8:0    0 19.8G  0 disk
 └─sda5   8:5    0 1021M  0 part [SWAP]
 ```
 
-	* Esta es la salida del comando `lsblk` después de conectarnos
+* Esta es la salida del comando `lsblk` después de conectarnos
+
 ```
 lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
