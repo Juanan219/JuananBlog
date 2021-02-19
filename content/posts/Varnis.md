@@ -72,9 +72,7 @@ Ejecutamos el playbook y esperamos a que termine todo el proceso
 ansible-playbook site.yaml
 ~~~
 
-Esta es la configuración de wordpewss
-
-[![Vídeo](https://i.ytimg.com/vi/DxB-5gYjDEI/hqdefault.jpg)](https://www.youtube.com/watch?v=DxB-5gYjDEI)
+Esta es la [configuración de wordpewss](https://www.youtube.com/watch?v=DxB-5gYjDEI)
 
 * **Tarea 2:**
 
