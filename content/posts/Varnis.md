@@ -20,7 +20,7 @@ tags:
   - Rendimiento
 ---
 
-Según las pruebas de rendimiento que se han realizado con el comando `ab` a varias configuraciones de servidores webs sirviendo un Wordpress, la mejor configuraciónm para este tipo de escenarios es `PHP-FPM (Socket Unix) + NGINX`.
+Según las pruebas de rendimiento que se han realizado con el comando `ab` a varias configuraciones de servidores webs sirviendo un Wordpress, la mejor configuración para este tipo de escenarios es `PHP-FPM (Socket Unix) + NGINX`.
 
 El comando usado para las pruebas es el siguiente:
 ~~~
@@ -72,7 +72,8 @@ Ejecutamos el playbook y esperamos a que termine todo el proceso
 ansible-playbook site.yaml
 ~~~
 
-Esta es la [configuración de wordpewss](https://www.youtube.com/watch?v=DxB-5gYjDEI)
+Esta es la configuración de wordpress
+[![Vídeo](https://i.ytimg.com/vi/DxB-5gYjDEI/hqdefault.jpg)](https://www.youtube.com/watch?v=DxB-5gYjDEI)
 
 * **Tarea 2:**
 
