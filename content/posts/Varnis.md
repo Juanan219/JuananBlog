@@ -74,7 +74,7 @@ ansible-playbook site.yaml
 
 Esta es la configuración de wordpewss
 
-![[Vídeo](https://i.ytimg.com/vi/DxB-5gYjDEI/hqdefault.jpg)](https://www.youtube.com/watch?v=DxB-5gYjDEI)
+![![Vídeo](https://i.ytimg.com/vi/DxB-5gYjDEI/hqdefault.jpg)](https://www.youtube.com/watch?v=DxB-5gYjDEI)
 
 * **Tarea 2:**
 
