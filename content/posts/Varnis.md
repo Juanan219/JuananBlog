@@ -73,7 +73,7 @@ ansible-playbook site.yaml
 ~~~
 
 Esta es la configuración de wordpress
-[![Vídeo](https://i.ytimg.com/vi/DxB-5gYjDEI/hqdefault.jpg)](https://www.youtube.com/watch?v=DxB-5gYjDEI)
+[![Vídeo](https://i.ytimg.com/vi/W3i6eIJQ89M/maxresdefault.jpg)](https://www.youtube.com/watch?v=W3i6eIJQ89M)
 
 * **Tarea 2:**
 
