@@ -1,7 +1,7 @@
 ---
 author:
   name: "Juan Antonio Reifs"
-date: 2021-02-09
+date: 2021-02-23
 linktitle: Imagenes Docker
 type:
 - post
