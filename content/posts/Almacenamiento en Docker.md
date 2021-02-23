@@ -329,3 +329,40 @@ docker run --name apache_php -v /home/juanan/miweb:/var/www/html -p 8080:80 -d p
 ![Captura 10](/Docker/Documentacion/10.png)
 
 Sí, se sigue visualizando el mismo contenido, ya que el fichero `index.html` está almacenado en el directorio que usamos como **bind mount**.
+
+3. **Contenedores con almacenamiento persistente**
+
+	* **Crea un contenedor de la imagen `nextcloud` (usando `sqlite`) configurando un almacenamiento como nos muestra la [documentación de la imagen](https://hub.docker.com/_/nextcloud) en DockerHub (pero utilizando `bind mount`). Sube algún fichero.**
+~~~
+docker run --name docker_nextcloud -v /home/juanan/nextcloud:/var/www/html -p 8080:80 -d nextcloud
+ffe4a54d5410245278ebe2e23ce9afec5c6dcece6f8ae3f52660337ff9ab0047
+
+echo "Esto es un fichero de prueba" > prueba.txt
+~~~
+
+![Captura 11](/Docker/Documentacion/11.png)
+
+He subido el archivo llamado `prueba.txt`
+
+
+	* **Elimina el contenedor**
+~~~
+docker rm -f docker_nextcloud
+docker_nextcloud
+~~~
+
+	* **Crea un contenedor nuevo con la misma configuración de volúmenes. Comprueba que la información que teníamos (ficheros, usuarios, etc...) sigue existiendo**
+~~~
+docker run --name docker_nextcloud -v /home/juanan/nextcloud:/var/www/html -p 8080:80 -d nextcloud
+967f37669b512c53d4bf5b235bd53a8970c04b748517a1a27358617cb633911d
+
+ls nextcloud/
+3rdparty  AUTHORS  console.php  core      custom_apps  index.html  lib  ocm-provider  ocs-provider  remote.php  robots.txt  themes
+apps      config   COPYING      cron.php  data         index.php   occ  ocs           public.php    resources   status.php  version.php
+~~~
+
+	* **Comprueba el contenido del directorio que se ha creado en el host**
+
+![Captura 12](/Docker/Documentacion/12.png)
+
+Como podemos comprobar, después de haber eliminado el contenedor y habiendo hecho uno nuevo, como los archivos de `nextcloud` se encontraban en el directorio `/home/juanan/nextcloud`, siguen estando ahí, por lo que ni los usuarios, ni los datos que hemos subido se han eliminado.
