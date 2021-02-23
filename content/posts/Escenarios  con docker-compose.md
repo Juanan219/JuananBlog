@@ -255,7 +255,7 @@ juanan_wordpress_1   docker-entrypoint.sh apach ...   Up      80/tcp, 0.0.0.0:80
 
 7. **Accede a la aplicación y comprueba que funciona**
 
-![Captura 17](/Docker/Documentacion/17.png)
+![Captura 18](/Docker/Documentacion/18.png)
 
 8. **Comprueba el almacenamiento que has definido y que se ha creado una red de tipo `bridge`**
 ~~~
