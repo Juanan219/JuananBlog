@@ -1,7 +1,7 @@
 ---
 author:
   name: "Juan Antonio Reifs"
-date: 2021-02-07
+date: 2021-03-07
 linktitle: Aplicaciones en Docker
 type:
 - post
@@ -132,7 +132,7 @@ Ahora si nos metemos en la dirección de `loopback` (`127.0.0.1`) de nuestra má
 
 ![Captura 1](/Docker/Practica/1.png)
 
-Este es el [repositorio de GitHub](https://github.com/Juanan219/) donde está el directorio `build` y los fichero de `docker-compose`.
+> [Repositorio de GitHub](https://github.com/Juanan219/)
 
 ## Tarea 2
 
@@ -379,6 +379,8 @@ docker-compose up -d
 
 ![Captura 3](/Docker/Practica/3.png)
 
+> [Repositorio de GitHub](https://github.com/Juanan219/Bookmedik-Tarea3)
+
 #### Tarea 5
 
 Por último vamos a instalar un CMS de PHP con una imagen en DockerHub creando los contenedores necesarios para instalarla. En mi caso he escogido `joomla`. He hecho un script de `docker-compose` para ejecutar los dos contenedores que necesita joomla, uno de ellos es una imagen `mariadb` y la otra es una imagen `joomla`
@@ -429,3 +431,5 @@ Una vez que hayamos terminado la configuración del sitio nos podemos meter en l
 Esta es la página de ejemplo de Joomla
 
 ![Captura 6](/Docker/Practica/6.png)
+
+> [Repositorio de GitHub](https://github.com/Juanan219/CMS-PHP-Tarea5)
