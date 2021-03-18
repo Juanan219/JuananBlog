@@ -48,6 +48,8 @@ disableHugoGeneratorInject = false
   series   = "series"
 
 [params]
+  defaultTheme = "dark"
+  themeColor = "#252627"
   dateform        = "Feb 4, 2021"
   dateformShort   = "Feb 4"
   dateformNum     = "2021-02-04"
