@@ -1,4 +1,24 @@
-# Metricas, logs y monitorización
+---
+author:
+  name: "Juan Antonio Reifs"
+date: 2021-04-28
+linktitle: Metricas
+type:
+- post
+- posts
+title: Metricas logs y monitorizacion
+weight: 10
+series:
+- Hugo 101
+images:
+tags:
+  - Practica
+  - Grafana
+  - InfluxDB
+  - Telegraf
+  - Metricas
+  - Monitorizacion
+---
 
 ## Descripción del escenario
 
