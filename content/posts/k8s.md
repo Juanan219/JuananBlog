@@ -2,7 +2,7 @@
 author:
   name: "Juan Antonio Reifs"
 date: 2021-05-18
-linktitle: Bienvenida
+linktitle: k8s
 type:
 - post
 - posts
