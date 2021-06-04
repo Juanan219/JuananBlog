@@ -1,7 +1,7 @@
 ---
 author:
   name: "Juan Antonio Reifs"
-date: 2021-02-09
+date: 2021-06-04
 linktitle: Configuracion LDAP
 type:
 - post
